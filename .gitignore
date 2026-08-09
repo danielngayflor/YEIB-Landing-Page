@@ -1,0 +1,12 @@
+# Raw/original source images (unprocessed, unused by the site).
+# The optimized versions actually referenced by index.html live in assets/img/.
+*.jpg
+*.jpeg
+*.png
+*.svg
+!assets/img/*.jpg
+!assets/img/*.jpeg
+!assets/img/*.png
+!assets/img/*.svg
+
+.DS_Store
