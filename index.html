@@ -489,6 +489,135 @@
     color: var(--gold-dark);
     margin-bottom: 8px;
   }
+
+  /* ======================================================================
+     MOTION — scroll reveals, entrance animation, and micro-interactions.
+     Everything here is CSS transitions/keyframes plus a tiny
+     IntersectionObserver (no animation library, keeps the 3G budget).
+     The prefers-reduced-motion block at the bottom of this section is
+     the accessibility override and always wins.
+     ====================================================================== */
+
+  /* Scroll-triggered reveal, applied via IntersectionObserver in JS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s cubic-bezier(.21,.7,.4,1), transform 0.7s cubic-bezier(.21,.7,.4,1);
+  }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+  /* Hero entrance */
+  @keyframes fadeUpIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-copy h1,
+  .hero-copy p.sub,
+  .hero-copy .hero-secondary-link {
+    opacity: 0;
+    animation: fadeUpIn 0.8s cubic-bezier(.21,.7,.4,1) forwards;
+  }
+  .hero-copy h1 { animation-delay: .05s; }
+  .hero-copy p.sub:nth-of-type(1) { animation-delay: .2s; }
+  .hero-copy p.sub:nth-of-type(2) { animation-delay: .34s; }
+  .hero-copy .hero-secondary-link { animation-delay: .48s; }
+
+  @keyframes heroImageIn {
+    from { opacity: 0; transform: scale(1.06); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .hero-media img { animation: heroImageIn 1s cubic-bezier(.21,.7,.4,1) forwards; }
+
+  /* Partner logo strip: staggered fade-in + hover lift */
+  .partner-strip img {
+    opacity: 0;
+    animation: fadeUpIn .6s ease forwards;
+    transition: transform .2s ease;
+  }
+  .partner-strip img:nth-child(1) { animation-delay: .55s; }
+  .partner-strip img:nth-child(2) { animation-delay: .63s; }
+  .partner-strip img:nth-child(3) { animation-delay: .71s; }
+  .partner-strip img:nth-child(4) { animation-delay: .79s; }
+  .partner-strip img:hover { transform: scale(1.08); }
+
+  /* Sticky top bar gains a shadow once the page scrolls */
+  .topbar { transition: box-shadow .25s ease; }
+  .topbar.scrolled { box-shadow: 0 4px 16px rgba(0,0,0,.28); }
+
+  /* Buttons: lift on hover, press feedback on click */
+  /* Redeclared (not just added to) so the opacity transition .reveal
+     sets survives on elements — like the final-band button — that
+     carry both classes; same-specificity rules don't merge, they replace. */
+  .btn { transition: opacity .7s cubic-bezier(.21,.7,.4,1), transform .15s ease, box-shadow .15s ease, background .15s ease; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(0,0,0,.18); }
+  .btn-primary:active { transform: translateY(0) scale(.97); box-shadow: none; }
+  .btn-primary.btn-disabled:hover { transform: none; box-shadow: none; }
+  .link-btn { transition: transform .15s ease, background .15s ease; }
+  .link-btn:hover { transform: translateY(-2px); }
+  .link-btn:active { transform: translateY(0) scale(.97); }
+
+  /* Eligibility checklist: pop feedback on selection */
+  .yn-btn { transition: transform .15s ease, background .15s ease, color .15s ease, border-color .15s ease; }
+  .yn-btn:active { transform: scale(.92); }
+  @keyframes pop { 0% { transform: scale(1); } 45% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  .yn-btn.selected-yes, .yn-btn.selected-no { animation: pop .3s ease; }
+
+  @keyframes resultIn {
+    from { opacity: 0; transform: translateY(14px) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .eligibility-result.show { animation: resultIn .5s cubic-bezier(.21,.7,.4,1); }
+
+  /* Pillar cards: staggered reveal + hover lift.
+     (transition redeclared here to fold opacity back in alongside the
+     hover-specific properties — otherwise this rule would clobber the
+     opacity transition .reveal set above, since both are single-class
+     selectors and this one wins by source order.) */
+  .pillar-card { transition: opacity .7s cubic-bezier(.21,.7,.4,1), transform .3s ease, box-shadow .25s ease; }
+  .pillar-card:hover { transform: translateY(-6px); box-shadow: 0 16px 30px rgba(10,31,68,.14); }
+  .pillars .pillar-card.reveal:nth-child(2) { transition-delay: .12s; }
+
+  /* County chips: staggered reveal (delay set per-item in JS) + hover lift */
+  .county-list li { transition: opacity .7s cubic-bezier(.21,.7,.4,1), transform .3s ease, box-shadow .2s ease, border-color .2s ease; }
+  .county-list li:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(10,31,68,.10); border-color: var(--gold); }
+
+  /* Date cards + steps: staggered reveal */
+  .dates-grid .date-card.reveal:nth-child(1) { transition-delay: 0s; }
+  .dates-grid .date-card.reveal:nth-child(2) { transition-delay: .1s; }
+  .dates-grid .date-card.reveal:nth-child(3) { transition-delay: .2s; }
+  .steps li.reveal:nth-child(1) { transition-delay: 0s; }
+  .steps li.reveal:nth-child(2) { transition-delay: .08s; }
+  .steps li.reveal:nth-child(3) { transition-delay: .16s; }
+  .steps li.reveal:nth-child(4) { transition-delay: .24s; }
+  .steps li.reveal:nth-child(5) { transition-delay: .32s; }
+
+  /* FAQ: springier chevron rotate + hover tint */
+  .faq-question { transition: color .2s ease; }
+  .faq-question:hover { color: var(--gold-dark); }
+  .faq-icon { transition: transform .3s cubic-bezier(.34,1.56,.64,1), border-color .2s ease; }
+  .faq-item.open .faq-question { color: var(--gold-dark); }
+
+  /* Countdown: brief pulse on any digit that just changed */
+  @keyframes countPulse {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.18); color: #ffd97a; }
+    100% { transform: scale(1); }
+  }
+  .countdown-unit.tick .num { animation: countPulse .45s ease; }
+
+  /* Accessibility: honor reduced-motion preference above all of the above */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+    .reveal, .hero-copy h1, .hero-copy p.sub, .hero-copy .hero-secondary-link,
+    .hero-media img, .partner-strip img {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -536,20 +665,20 @@
 <!-- ============ 3. ABOUT THE PROGRAM ============ -->
 <section class="about" id="about">
   <div class="container">
-    <div class="section-eyebrow">About YEIB</div>
-    <h2>What is YEIB?</h2>
-    <p>The Youth Entrepreneurship Investment Bank (YEIB) Technical Assistance Program is a Government of Liberia initiative, led by the Ministry of Commerce &amp; Industry through its Small Business Administration, and funded by the African Development Bank. YEIB exists to help small and growing Liberian businesses become stronger, more organized, and ready for the next stage of growth.</p>
-    <p>This is the <strong>first cohort</strong> of the YEIB program. We're selecting 50 MSMEs from across Liberia to take part in a structured program of training, mentorship, and market connections. If you apply and aren't selected this time, more cohorts will follow — this is the beginning of an ongoing program, not a one-time opportunity.</p>
-    <p>YEIB is not a grant program. It doesn't hand out cash. What it offers instead is structured, hands-on support to help your business become genuinely investment-ready — the kind of foundation that makes it easier to grow, to borrow, and to attract serious partners down the line.</p>
+    <div class="section-eyebrow reveal">About YEIB</div>
+    <h2 class="reveal">What is YEIB?</h2>
+    <p class="reveal">The Youth Entrepreneurship Investment Bank (YEIB) Technical Assistance Program is a Government of Liberia initiative, led by the Ministry of Commerce &amp; Industry through its Small Business Administration, and funded by the African Development Bank. YEIB exists to help small and growing Liberian businesses become stronger, more organized, and ready for the next stage of growth.</p>
+    <p class="reveal">This is the <strong>first cohort</strong> of the YEIB program. We're selecting 50 MSMEs from across Liberia to take part in a structured program of training, mentorship, and market connections. If you apply and aren't selected this time, more cohorts will follow — this is the beginning of an ongoing program, not a one-time opportunity.</p>
+    <p class="reveal">YEIB is not a grant program. It doesn't hand out cash. What it offers instead is structured, hands-on support to help your business become genuinely investment-ready — the kind of foundation that makes it easier to grow, to borrow, and to attract serious partners down the line.</p>
   </div>
 </section>
 
 <!-- ============ 4. AM I ELIGIBLE? ============ -->
 <section class="eligibility" id="eligibility">
   <div class="container">
-    <div class="section-eyebrow">Self-Check</div>
-    <h2>Am I Eligible?</h2>
-    <p class="intro">Answer six quick questions to see if YEIB's first cohort is a fit for you right now.</p>
+    <div class="section-eyebrow reveal">Self-Check</div>
+    <h2 class="reveal">Am I Eligible?</h2>
+    <p class="intro reveal">Answer six quick questions to see if YEIB's first cohort is a fit for you right now.</p>
 
     <div id="checklist"></div>
     <p class="eligibility-progress" id="progress-text"></p>
@@ -577,19 +706,19 @@
 <!-- ============ 5. WHAT WILL I GET? ============ -->
 <section class="benefits" id="benefits">
   <div class="container">
-    <div class="section-eyebrow">Program Support</div>
-    <h2>What Will I Get?</h2>
-    <p>Selected MSMEs receive structured support built around two pillars — at no cost.</p>
+    <div class="section-eyebrow reveal">Program Support</div>
+    <h2 class="reveal">What Will I Get?</h2>
+    <p class="reveal">Selected MSMEs receive structured support built around two pillars — at no cost.</p>
 
     <div class="pillars">
-      <div class="pillar-card">
+      <div class="pillar-card reveal">
         <img src="assets/img/capacity-building-sewing.jpg" alt="Woman entrepreneur working at her sewing machine, developing her craft (placeholder photo — to be replaced with real YEIB participant photography before launch)">
         <div class="pillar-body">
           <h3>Capacity Building</h3>
           <p>Hands-on training in financial management, investment readiness, business planning, and digital skills — built to help you run a stronger, more organized business.</p>
         </div>
       </div>
-      <div class="pillar-card">
+      <div class="pillar-card reveal">
         <div class="placeholder-block"><span>Image placeholder: Liberian entrepreneur at a market stall speaking with a buyer</span></div>
         <div class="pillar-body">
           <h3>Access to Market</h3>
@@ -598,16 +727,16 @@
       </div>
     </div>
 
-    <p class="benefits-reminder">This is a capacity-building and readiness program, not a cash grant. The value is in the training, mentorship, and connections — not a direct payout.</p>
+    <p class="benefits-reminder reveal">This is a capacity-building and readiness program, not a cash grant. The value is in the training, mentorship, and connections — not a direct payout.</p>
   </div>
 </section>
 
 <!-- ============ 6. THE 15 COUNTIES ============ -->
 <section class="counties" id="counties">
   <div class="container">
-    <div class="section-eyebrow">National Reach</div>
-    <h2>Open to All 15 Counties</h2>
-    <p>YEIB is a national program — not a Monrovia-only initiative. Entrepreneurs in Margibi, Bong, Nimba, Lofa, and the southeastern counties are just as encouraged to apply as those in Montserrado.</p>
+    <div class="section-eyebrow reveal">National Reach</div>
+    <h2 class="reveal">Open to All 15 Counties</h2>
+    <p class="reveal">YEIB is a national program — not a Monrovia-only initiative. Entrepreneurs in Margibi, Bong, Nimba, Lofa, and the southeastern counties are just as encouraged to apply as those in Montserrado.</p>
 
     <ul class="county-list" id="county-list"></ul>
 
@@ -618,21 +747,21 @@
 <!-- Youth representation image + How to apply intro -->
 <section id="how-to-apply">
   <div class="container">
-    <div class="section-eyebrow">Get Started</div>
-    <h2>How to Apply</h2>
+    <div class="section-eyebrow reveal">Get Started</div>
+    <h2 class="reveal">How to Apply</h2>
 
     <div class="pillars" style="margin-top:0; margin-bottom:8px;">
-      <div class="pillar-card" style="grid-column: 1 / -1;">
+      <div class="pillar-card reveal" style="grid-column: 1 / -1;">
         <img src="assets/img/youth-entrepreneur-shopkeeper.jpg" style="height:240px;" alt="Young man entrepreneur at the counter of his shop (placeholder photo — to be replaced with real YEIB participant photography before launch)">
       </div>
     </div>
 
     <ol class="steps">
-      <li><div><strong>Read this page</strong><span>Understand what YEIB offers and what it doesn't.</span></div></li>
-      <li><div><strong>Check your eligibility</strong><span>Use the checklist above.</span></div></li>
-      <li><div><strong>Click Apply</strong><span>You'll be taken to the online application form.</span></div></li>
-      <li><div><strong>Complete the form</strong><span>Have your business details ready.</span></div></li>
-      <li><div><strong>Submit and wait for confirmation</strong><span>You'll receive a confirmation once your application is received.</span></div></li>
+      <li class="reveal"><div><strong>Read this page</strong><span>Understand what YEIB offers and what it doesn't.</span></div></li>
+      <li class="reveal"><div><strong>Check your eligibility</strong><span>Use the checklist above.</span></div></li>
+      <li class="reveal"><div><strong>Click Apply</strong><span>You'll be taken to the online application form.</span></div></li>
+      <li class="reveal"><div><strong>Complete the form</strong><span>Have your business details ready.</span></div></li>
+      <li class="reveal"><div><strong>Submit and wait for confirmation</strong><span>You'll receive a confirmation once your application is received.</span></div></li>
     </ol>
 
     <a class="btn btn-primary" id="cta-how-to-apply" href="#">Apply Now</a>
@@ -642,25 +771,25 @@
 <!-- ============ 8. KEY DATES ============ -->
 <section class="key-dates" id="key-dates">
   <div class="container">
-    <div class="section-eyebrow" style="color:var(--gold);">Timeline</div>
-    <h2>Key Dates</h2>
+    <div class="section-eyebrow reveal" style="color:var(--gold);">Timeline</div>
+    <h2 class="reveal">Key Dates</h2>
 
     <div class="dates-grid">
-      <div class="date-card">
+      <div class="date-card reveal">
         <div class="label">Applications open</div>
         <div class="value" id="date-open"></div>
       </div>
-      <div class="date-card">
+      <div class="date-card reveal">
         <div class="label">Applications close</div>
         <div class="value" id="date-close"></div>
       </div>
-      <div class="date-card">
+      <div class="date-card reveal">
         <div class="label">Selection announcement</div>
         <div class="value" id="date-selection"></div>
       </div>
     </div>
 
-    <div class="countdown-box">
+    <div class="countdown-box reveal">
       <div class="countdown-label" id="countdown-label">Time left to apply:</div>
       <div class="countdown-timer" id="countdown-timer">
         <div class="countdown-unit"><div class="num" id="cd-days">--</div><div class="unit">Days</div></div>
@@ -670,24 +799,24 @@
       </div>
     </div>
 
-    <p class="key-dates-reminder">This is YEIB's first cohort. Applications for future cohorts will open at a later date — follow our channels to hear about the next one.</p>
+    <p class="key-dates-reminder reveal">This is YEIB's first cohort. Applications for future cohorts will open at a later date — follow our channels to hear about the next one.</p>
   </div>
 </section>
 
 <!-- ============ 9. FAQ ============ -->
 <section id="faq">
   <div class="container">
-    <div class="section-eyebrow">Questions</div>
-    <h2>FAQs</h2>
-    <div id="faq-list"></div>
+    <div class="section-eyebrow reveal">Questions</div>
+    <h2 class="reveal">FAQs</h2>
+    <div id="faq-list" class="reveal"></div>
   </div>
 </section>
 
 <!-- Final CTA band -->
 <div class="final-cta">
   <div class="container">
-    <h2>Ready to find out if YEIB is right for your business?</h2>
-    <a class="btn btn-primary" id="cta-final" href="#">Apply Now</a>
+    <h2 class="reveal">Ready to find out if YEIB is right for your business?</h2>
+    <a class="btn btn-primary reveal" id="cta-final" href="#">Apply Now</a>
   </div>
 </div>
 
@@ -909,9 +1038,11 @@ const COUNTIES = [
 ];
 (function renderCounties() {
   var list = document.getElementById("county-list");
-  COUNTIES.forEach(function (name) {
+  COUNTIES.forEach(function (name, idx) {
     var li = document.createElement("li");
     li.textContent = name;
+    li.className = "reveal";
+    li.style.transitionDelay = Math.min(idx * 0.035, 0.4) + "s";
     list.appendChild(li);
   });
 })();
@@ -948,10 +1079,22 @@ document.getElementById("date-selection").textContent = CONFIG.selectionAnnounce
     var mins = Math.floor((diff / (1000 * 60)) % 60);
     var secs = Math.floor((diff / 1000) % 60);
 
-    daysEl.textContent = days;
-    hoursEl.textContent = String(hours).padStart(2, "0");
-    minsEl.textContent = String(mins).padStart(2, "0");
-    secsEl.textContent = String(secs).padStart(2, "0");
+    setUnit(daysEl, days);
+    setUnit(hoursEl, String(hours).padStart(2, "0"));
+    setUnit(minsEl, String(mins).padStart(2, "0"));
+    setUnit(secsEl, String(secs).padStart(2, "0"));
+  }
+
+  // Updates a countdown digit and gives its box a brief pulse whenever
+  // the value actually changes (so the widget visibly "ticks").
+  function setUnit(el, val) {
+    val = String(val);
+    if (el.textContent === val) return;
+    el.textContent = val;
+    var unit = el.closest(".countdown-unit");
+    unit.classList.remove("tick");
+    void unit.offsetWidth; // force reflow so the animation can restart
+    unit.classList.add("tick");
   }
 
   tick();
@@ -1031,6 +1174,45 @@ const FAQ_ITEMS = [
     a.innerHTML = icons[key];
     wrap.appendChild(a);
   });
+})();
+
+/* ---------------------------------------------------------------------
+   Motion: scroll-triggered reveals + sticky top-bar shadow.
+   Runs last so every dynamically-built element (counties, FAQ) already
+   exists in the DOM. IntersectionObserver only — no animation library.
+   --------------------------------------------------------------------- */
+(function setupScrollReveal() {
+  if (!("IntersectionObserver" in window)) {
+    // No observer support: just show everything, no motion.
+    document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in-view"); });
+    return;
+  }
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("in-view");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
+
+  document.querySelectorAll(".reveal").forEach(function (el) { observer.observe(el); });
+})();
+
+(function setupStickyTopbarShadow() {
+  var topbar = document.querySelector(".topbar");
+  var ticking = false;
+  function update() {
+    topbar.classList.toggle("scrolled", window.scrollY > 8);
+    ticking = false;
+  }
+  window.addEventListener("scroll", function () {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+  update();
 })();
 </script>
 </body>
