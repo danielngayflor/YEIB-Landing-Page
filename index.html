@@ -5,17 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YEIB — Youth Entrepreneurship Investment Bank | MSME Applications</title>
 <meta name="description" content="YEIB is opening its first call for applications. A capacity-building and investment-readiness program for Liberian MSMEs, led by the Ministry of Commerce & Industry.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230A1F44'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial,sans-serif' font-weight='700' fill='%23F4B942' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2310291F'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial,sans-serif' font-weight='700' fill='%231E8449' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
 <style>
+  /* ======================================================================
+     Palette — forest green / cream brand refresh (Aug 2026), matching the
+     YEIB social/flyer creative. Variable NAMES kept as --navy/--gold/etc.
+     to avoid touching every usage site; only the color VALUES changed.
+     --tan-accent is new: a warm gold-tan used where the vibrant green
+     accent (--gold) would read as green-on-green against dark backgrounds.
+     ====================================================================== */
   :root {
-    --navy: #0A1F44;
-    --navy-light: #12305e;
-    --navy-tint: #EEF1F7;
-    --gold: #F4B942;
-    --gold-dark: #d99f2b;
+    --navy: #10291F;
+    --navy-light: #1E4F37;
+    --navy-tint: #F1EEDF;
+    --gold: #1E8449;
+    --gold-dark: #146336;
+    --tan-accent: #D9A94A;
     --white: #FFFFFF;
-    --gray-text: #3c4657;
-    --border: #dfe4ee;
+    --gray-text: #48564C;
+    --border: #DCE3D6;
     --max-width: 1120px;
   }
 
@@ -40,7 +48,7 @@
     padding: 0 20px;
   }
 
-  h1, h2, h3 { font-weight: 700; line-height: 1.2; margin: 0 0 16px; }
+  h1, h2, h3 { font-weight: 800; line-height: 1.15; margin: 0 0 16px; letter-spacing: -0.01em; }
   h2 { font-size: clamp(1.6rem, 4vw, 2.1rem); }
   h3 { font-size: 1.2rem; }
   p { margin: 0 0 16px; }
@@ -63,13 +71,13 @@
   }
   .btn-primary {
     background: var(--gold);
-    color: var(--navy);
+    color: var(--white);
   }
   .btn-primary:hover { background: var(--gold-dark); }
   .btn-primary.btn-disabled,
   .btn-primary.btn-disabled:hover {
-    background: #cbd2e0 !important;
-    color: #6b7690 !important;
+    background: #d3d8ca !important;
+    color: #6b7666 !important;
     cursor: not-allowed;
     pointer-events: none;
   }
@@ -105,9 +113,12 @@
   }
   .topbar .btn-primary { padding: 10px 18px; font-size: 0.95rem; }
 
-  /* Hero */
+  /* Hero — diagonal color-block swoosh, echoing the flyer creative */
   .hero {
-    background: var(--navy);
+    background:
+      linear-gradient(122deg, rgba(217,169,74,0.14) 0%, transparent 20%),
+      linear-gradient(135deg, transparent 36%, rgba(30,132,73,0.55) 50%, rgba(120,200,150,0.32) 64%, transparent 80%),
+      var(--navy);
     color: var(--white);
     padding: 40px 0 0;
   }
@@ -119,17 +130,19 @@
   }
   .hero h1 {
     font-size: clamp(1.9rem, 6vw, 2.8rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
     margin-bottom: 18px;
   }
   .hero p.sub {
     font-size: 1.1rem;
-    color: #d7deee;
+    color: #C9DCC7;
     margin-bottom: 26px;
   }
   .hero-secondary-link {
     display: inline-block;
     margin-top: 4px;
-    color: var(--gold);
+    color: var(--tan-accent);
     text-decoration: none;
     font-weight: 600;
     font-size: 0.98rem;
@@ -149,8 +162,9 @@
 
   /* Partner logo strip */
   .partner-strip {
-    background: var(--navy-light);
-    padding: 14px 0;
+    background: var(--white);
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
   }
   .partner-strip .container {
     display: flex;
@@ -176,9 +190,10 @@
   .about-inclusion {
     margin-top: 8px;
     padding: 16px 20px;
-    background: var(--navy-tint);
-    border-left: 4px solid var(--gold);
-    border-radius: 4px;
+    background: var(--gold);
+    border: 2px dashed rgba(255,255,255,0.55);
+    border-radius: 10px;
+    color: var(--white);
     font-weight: 600;
     font-size: 1rem;
   }
@@ -233,7 +248,7 @@
   .eligibility-result.eligible { background: var(--navy); color: var(--white); }
   .eligibility-result.not-eligible { background: var(--white); border: 2px solid var(--border); color: var(--navy); }
   .eligibility-result p { margin-bottom: 18px; font-size: 1.05rem; }
-  .eligibility-result.eligible p { color: #eef1f7; }
+  .eligibility-result.eligible p { color: #E5EFE2; }
   .eligibility-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .link-btn {
     background: transparent;
@@ -266,6 +281,14 @@
     border-radius: 12px;
     overflow: hidden;
   }
+  /* Cream "framed photo" treatment for standalone accent images, echoing
+     the flyer's polaroid-style bordered photo. */
+  .pillar-card.framed-photo {
+    border: 7px solid var(--navy-tint);
+    border-radius: 14px;
+    box-shadow: 0 12px 26px rgba(16,41,31,0.16);
+  }
+  .pillar-card.framed-photo img { border-radius: 7px; }
   .pillar-card img, .placeholder-block {
     width: 100%;
     height: 200px;
@@ -369,7 +392,7 @@
     text-transform: uppercase;
     font-size: 0.78rem;
     letter-spacing: 0.6px;
-    color: var(--gold);
+    color: var(--tan-accent);
     font-weight: 700;
     margin-bottom: 6px;
   }
@@ -395,13 +418,13 @@
     padding: 12px 16px;
     min-width: 74px;
   }
-  .countdown-unit .num { font-size: 1.8rem; font-weight: 700; color: var(--gold); line-height: 1; }
-  .countdown-unit .unit { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; color: #cfd8ea; }
+  .countdown-unit .num { font-size: 1.8rem; font-weight: 700; color: var(--tan-accent); line-height: 1; }
+  .countdown-unit .unit { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; color: #C9DCC7; }
 
   .key-dates-reminder {
     margin-top: 26px;
     font-size: 0.92rem;
-    color: #cfd8ea;
+    color: #C9DCC7;
     text-align: center;
   }
 
@@ -449,7 +472,7 @@
   /* Final CTA band */
   .final-cta {
     background: var(--gold);
-    color: var(--navy);
+    color: var(--white);
     text-align: center;
     padding: 44px 0;
   }
@@ -460,7 +483,7 @@
   /* Footer */
   footer {
     background: var(--navy);
-    color: #cfd8ea;
+    color: #C9DCC7;
     padding: 40px 0 26px;
     font-size: 0.92rem;
   }
@@ -478,7 +501,7 @@
     flex-wrap: wrap;
     gap: 14px;
   }
-  .footer-links a { color: #cfd8ea; text-decoration: none; margin-right: 18px; font-size: 0.88rem; }
+  .footer-links a { color: #C9DCC7; text-decoration: none; margin-right: 18px; font-size: 0.88rem; }
   .footer-links a:hover { text-decoration: underline; }
   .social-icons { display: flex; gap: 12px; }
   .social-icons a {
@@ -582,12 +605,12 @@
      opacity transition .reveal set above, since both are single-class
      selectors and this one wins by source order.) */
   .pillar-card { transition: opacity .7s cubic-bezier(.21,.7,.4,1), transform .3s ease, box-shadow .25s ease; }
-  .pillar-card:hover { transform: translateY(-6px); box-shadow: 0 16px 30px rgba(10,31,68,.14); }
+  .pillar-card:hover { transform: translateY(-6px); box-shadow: 0 16px 30px rgba(16,41,31,.14); }
   .pillars .pillar-card.reveal:nth-child(2) { transition-delay: .12s; }
 
   /* County chips: staggered reveal (delay set per-item in JS) + hover lift */
   .county-list li { transition: opacity .7s cubic-bezier(.21,.7,.4,1), transform .3s ease, box-shadow .2s ease, border-color .2s ease; }
-  .county-list li:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(10,31,68,.10); border-color: var(--gold); }
+  .county-list li:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(16,41,31,.10); border-color: var(--gold); }
 
   /* Date cards + steps: staggered reveal */
   .dates-grid .date-card.reveal:nth-child(1) { transition-delay: 0s; }
@@ -746,7 +769,7 @@
     <h2 class="reveal">Open to All 15 Counties</h2>
     <p class="reveal">YEIB is a national program — not a Monrovia-only initiative. Entrepreneurs in Margibi, Bong, Nimba, Lofa, and the southeastern counties are just as encouraged to apply as those in Montserrado.</p>
 
-    <div class="pillar-card reveal" style="margin: 24px 0;">
+    <div class="pillar-card framed-photo reveal" style="margin: 24px 0;">
       <img src="assets/img/counties-rice-fields.jpg" style="height:220px;" alt="Rice fields being tended in rural Liberia">
     </div>
 
@@ -783,7 +806,7 @@
 <!-- ============ 8. KEY DATES ============ -->
 <section class="key-dates" id="key-dates">
   <div class="container">
-    <div class="section-eyebrow reveal" style="color:var(--gold);">Timeline</div>
+    <div class="section-eyebrow reveal" style="color:var(--tan-accent);">Timeline</div>
     <h2 class="reveal">Key Dates</h2>
 
     <div class="dates-grid">
